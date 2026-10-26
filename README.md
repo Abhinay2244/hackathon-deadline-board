@@ -78,7 +78,7 @@ Progress % = `hoursCompleted / 15 * 100`
 
 Built for **Devpost Learn: Build With AI – Basics**.
 
-- Demo video: *[add your link]*
+- Demo video: https://youtu.be/5_GSEsx1O_Y
 - Public repo: `https://github.com/Abhinay2244/hackathon-deadline-board`
 
 ---
