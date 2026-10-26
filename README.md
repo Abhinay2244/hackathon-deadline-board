@@ -28,11 +28,8 @@ Zero dependencies. Zero build step. Runs by double-clicking `index.html`.
 
 ## Quick Start
 
-**Live Demo:** https://abhinay2244.github.io/hackathon-deadline-board/  
-*(Enable GitHub Pages: Settings → Pages → Deploy from branch → main → Save)*
-
 ```bash
-# Option 1: Just open the file
+# Option 1: Just open the file (recommended)
 double-click index.html
 
 # Option 2: Local static server
@@ -42,6 +39,8 @@ npx serve .
 python -m http.server 8000
 # then open http://localhost:8000
 ```
+
+> **Note:** This is a pure static app — no build, no server needed. Just open `index.html` directly in your browser.
 
 ---
 
