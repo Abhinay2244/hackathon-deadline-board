@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Deadline Board — App Map</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 900px; margin: 0 auto; padding: 24px;
+            background: #0d1117; color: #c9d1d9; line-height: 1.6;
+        }
+        h1 { color: #f0f6fc; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
+        h2 { color: #58a6ff; margin-top: 32px; }
+        h3 { color: #8b949e; font-weight: 500; }
+        code { background: #161b22; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+        pre { background: #161b22; padding: 16px; border-radius: 6px; overflow-x: auto; border: 1px solid #30363d; }
+        pre code { background: none; padding: 0; }
+        .card { background: #161b22; border: 1px solid #30363d; border-left: 4px solid #58a6ff; border-radius: 8px; padding: 16px; margin: 16px 0; }
+        .card h3 { margin-top: 0; }
+        .route-stop { border-left: 3px solid #238636; padding-left: 12px; margin: 12px 0; }
+        .route-stop .label { font-weight: 600; color: #58a6ff; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background: rgba(35,134,54,0.2); color: #3fb950; border: 1px solid rgba(63,185,80,0.4); }
+        .badge.warn { background: rgba(210,153,34,0.2); color: #d29922; border-color: rgba(210,153,34,0.4); }
+        .badge.danger { background: rgba(248,81,73,0.2); color: #f85149; border-color: rgba(248,81,73,0.4); }
+        .diagram { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; white-space: pre; background: #161b22; padding: 16px; border-radius: 6px; border: 1px solid #30363d; overflow-x: auto; }
+        details { margin: 16px 0; }
+        summary { cursor: pointer; color: #58a6ff; font-weight: 500; }
+        summary:hover { text-decoration: underline; }
+        .practice { background: #1c2128; border: 1px solid #444c56; border-left: 4px solid #d29922; padding: 16px; border-radius: 8px; margin-top: 24px; }
+        .practice h3 { margin-top: 0; color: #d29922; }
+        a { color: #58a6ff; }
+        .file-ref { color: #8b949e; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>Hackathon Deadline Board — App Map</h1>
+    <p class="file-ref">Generated from commit after final revisions. Snapshot — code may drift.</p>
+
+    <h2>What This App Does</h2>
+    <p>A browser-only dashboard for students juggling multiple hackathons. Add hackathons with deadlines; each becomes a card with a live countdown and a <strong>"Can I finish?" feasibility meter</strong> (Safe / Tight / Impossible) based on per-task hour estimates. A <strong>"What to do today"</strong> panel at the top prioritizes unfinished tasks by urgency. All data persists in <code>localStorage</code> — no backend, no login.</p>
+
+    <h2>Architecture Diagram</h2>
+    <div class="diagram">
+┌─────────────────────────────────────────────────────────────────────┐
+│                        USER INTERACTION                             │
+│  [Tick checkbox] ──► [Load sample] ──► [Add/Edit/Delete]           │
+└────────────────────────────┬────────────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                       app.js — STATE & LOGIC                        │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  │
+│  │ hackathons[]     │  │ TASK_HOURS       │  │ calculateStatus()│  │
+│  │ (in memory)      │──►│ {idea:2,build:8, │──►│ hoursNeeded vs   │  │
+│  │                  │  │  readme:1,       │   │ hoursLeft        │  │
+│  │ persisted via    │  │  demo:3,submit:1}│   │ returns type,    │  │
+│  │ localStorage     │  └──────────────────┘   │ reason, hint     │  │
+│  └──────────────────┘                         └────────┬─────────┘  │
+│         │                                               │            │
+│         ▼                                               ▼            │
+│  ┌──────────────────┐  ┌────────────────────────────────────────┐  │
+│  │ toggleTask()     │  │ render() / renderCard() /              │  │
+│  │ • prereq guard   │  │ renderTodoPanel()                      │  │
+│  │ • auto-untick    │  │ • progress % = hoursDone/15            │  │
+│  │ • save()+render  │  │ • badge + left-border color            │  │
+│  └──────────────────┘  │ • reason: "Build, README left..."      │  │
+│                        │ • checklist with Submit lock           │  │
+│                        └────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         DOM (index.html)                            │
+│  • header: title, tagline, [Add] [Load samples]                     │
+│  • #todoPanel: prioritized task list (max 6)                       │
+│  • #cardsBoard: active → Done → Expired sections                   │
+│  • #hackathonModal: Add/Edit form                                  │
+│  • #confettiContainer: celebration animation                       │
+└─────────────────────────────────────────────────────────────────────┘
+    </div>
+
+    <h2>Reference Route — "Tick a Task"</h2>
+    <p>Follow the core interaction through three code locations:</p>
+
+    <div class="route-stop">
+        <div class="label">1. Entry Point — <code>window.toggleTask(hackathonId, taskKey)</code></div>
+        <p><strong>File:</strong> <code>app.js</code> ~line 142</p>
+        <p>Called from checkbox <code>onchange</code> on both cards and the "What to do today" panel. Finds the hackathon, enforces the Submit dependency rule (unticking a prereq auto-unticks Submit), flips the boolean, checks for completion, triggers confetti, then <code>save()</code> + <code>render()</code>.</p>
+    </div>
+
+    <div class="route-stop">
+        <div class="label">2. Feasibility Engine — <code>calculateStatus(h)</code></div>
+        <p><strong>File:</strong> <code>app.js</code> ~line 31</p>
+        <p>Sums <code>TASK_HOURS</code> of unfinished tasks (Idea 2, Build 8, README 1, Demo 3, Submit 1 = 15h total). Computes <code>hoursLeft</code> until deadline. Returns <code>{type, label, reason, hint, hoursCompleted, hoursNeeded}</code> where <code>type</code> ∈ <span class="badge">safe</span> <span class="badge warn">tight</span> <span class="badge danger">impossible</span> <span class="badge">submitted</span> <span class="badge" style="background:rgba(72,79,88,0.2);color:#8b949e;border-color:rgba(72,79,88,0.4);">expired</span>.</p>
+    </div>
+
+    <div class="route-stop">
+        <div class="label">3. Visual Update — <code>renderCard(h, status)</code></div>
+        <p><strong>File:</strong> <code>app.js</code> ~line 222</p>
+        <p>Builds card HTML: progress % = <code>hoursCompleted/15</code>, badge + left-border color from <code>status.type</code>, reason line (e.g., <code>"Build, README left, about 9 hours needed, 4.5h left"</code>), pace hint, checklist with Submit <code>disabled</code> + lock hint when prereqs unmet.</p>
+    </div>
+
+    <h2>To Change This, Start Here</h2>
+    <div class="card">
+        <h3>Adjust task hour estimates</h3>
+        <p>Edit <code>TASK_HOURS</code> in <code>app.js</code> (line ~23). Progress %, status thresholds, reason text, and pace hint all update automatically.</p>
+    </div>
+    <div class="card">
+        <h3>Modify status thresholds</h3>
+        <p>Edit the <code>hoursNeeded > hoursLeft</code> (Impossible) and <code>hoursNeeded > hoursLeft * 0.6</code> (Tight) comparisons in <code>calculateStatus()</code>.</p>
+    </div>
+    <div class="card">
+        <h3>Change "What to do today" prioritization</h3>
+        <p>Edit <code>renderTodoPanel()</code> logic (line ~269): urgent hackathon gets 3 tasks vs 1–2 from others; 48h threshold; max 6 items total.</p>
+    </div>
+    <div class="card">
+        <h3>Tweak the dark theme</h3>
+        <p>Colors are CSS custom-properties-friendly in <code>style.css</code>: <code>#0d1117</code> (bg), <code>#161b22</code> (cards), <code>#238636</code> (safe), <code>#d29922</code> (tight), <code>#f85149</code> (impossible).</p>
+    </div>
+
+    <div class="practice">
+        <h3>A Practice to Reuse</h3>
+        <p><strong>Decision:</strong> Define task hour estimates as a single constant object (<code>TASK_HOURS</code>) rather than a flat "3 hours per task" multiplier.</p>
+        <p><strong>Evidence:</strong> <code>app.js</code> lines 23–29 (data), 41–42 (engine), 247–250 (progress %), 241–244 (reason line). Changing one object ripples through status calculation, progress bar, reason text, and pace hint without touching the logic.</p>
+        <p><strong>How to apply next time:</strong> When a feature has multiple derived outputs (badges, progress, text, hints), express the <em>source-of-truth data</em> first. Ask the agent: "Here's the data shape — derive everything from it." This keeps derived views consistent and makes later tuning a one-line edit.</p>
+    </div>
+
+    <h2>Run the App</h2>
+    <pre><code># Option 1: Double-click index.html
+# Option 2: npx serve .
+# Option 3: python -m http.server 8000</code></pre>
+    <p>Then open <code>http://localhost:8000</code> (or the file:// URL).</p>
+
+    <hr style="border-color: #30363d; margin-top: 40px;">
+    <p style="color: #8b949e; font-size: 0.9em;">
+        This map reflects the implementation at the end of the guided build.
+        Source files: <code>index.html</code>, <code>style.css</code>, <code>app.js</code>, <code>samples.js</code>.
+        Planning artifacts in <code>devpost/</code>.
+    </p>
+</body>
+</html>

@@ -1,0 +1,331 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding: 20px;
+}
+#app {
+    max-width: 800px;
+    margin: 0 auto;
+}
+header {
+    background-color: #161b22;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    margin-bottom: 24px;
+}
+header h1 {
+    font-size: 28px;
+    color: #f0f6fc;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+header p {
+    font-size: 14px;
+    color: #8b949e;
+    margin-bottom: 8px;
+}
+.actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+}
+button {
+    background-color: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+button:hover {
+    background-color: #30363d;
+}
+button#addHackathonBtn {
+    background-color: #238636;
+    color: #ffffff;
+    border-color: rgba(240,246,252,0.1);
+}
+button#addHackathonBtn:hover {
+    background-color: #2ea043;
+}
+
+/* Panels and Boards */
+.panel {
+    background-color: #1c2128;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #444c56;
+    margin-bottom: 24px;
+}
+.board {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.expired-section {
+    margin-top: 32px;
+    border-top: 1px solid #30363d;
+    padding-top: 16px;
+}
+.expired-section h3 {
+    font-size: 14px;
+    color: #8b949e;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Cards */
+.card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-left: 4px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    transition: transform 0.1s;
+}
+.card.status-safe { border-left-color: #238636; }
+.card.status-tight { border-left-color: #d29922; }
+.card.status-impossible { border-left-color: #f85149; }
+.card.status-expired { border-left-color: #484f58; opacity: 0.7; }
+.card.status-submitted { border-left-color: #238636; }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+}
+.card-header a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+}
+.card-header a:hover { text-decoration: underline; }
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+.btn-icon {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.deadline-text {
+    font-size: 13px;
+    color: #8b949e;
+    margin-bottom: 8px;
+}
+.countdown {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: #f0f6fc;
+    margin-bottom: 12px;
+}
+
+/* Badges and Hints */
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.badge-safe { background: rgba(35, 134, 54, 0.2); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.4); }
+.badge-tight { background: rgba(210, 153, 34, 0.2); color: #d29922; border: 1px solid rgba(210, 153, 34, 0.4); }
+.badge-impossible { background: rgba(248, 81, 73, 0.2); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.4); }
+.badge-expired { background: rgba(72, 79, 88, 0.2); color: #8b949e; border: 1px solid rgba(72, 79, 88, 0.4); }
+.badge-done { background: rgba(35, 134, 54, 0.2); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.4); }
+.badge-submitted { background: rgba(35, 134, 54, 0.2); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.4); }
+
+.reason-line { font-size: 12px; color: #8b949e; }
+.pace-hint { font-size: 12px; color: #8b949e; font-style: italic; margin-bottom: 12px; }
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 16px;
+}
+.progress-text {
+    font-size: 12px;
+    color: #8b949e;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+.progress-bg {
+    height: 6px;
+    background: #30363d;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+.fill-safe { background-color: #238636; }
+.fill-tight { background-color: #d29922; }
+.fill-impossible { background-color: #f85149; }
+.fill-done { background-color: #238636; }
+.fill-submitted { background-color: #238636; }
+
+/* Checklist */
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.task-item input { cursor: pointer; }
+.task-item.completed {
+    text-decoration: line-through;
+    color: #8b949e;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+.modal-content {
+    background: #161b22;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+#hackathonForm input {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+}
+#hackathonForm input:focus {
+    outline: none;
+    border-color: #58a6ff;
+}
+
+/* "What to do today" list */
+.todo-list {
+    list-style: none;
+}
+.todo-task {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #30363d;
+    font-size: 14px;
+}
+.todo-task:last-child { border-bottom: none; }
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.dot-safe { background-color: #238636; }
+.dot-tight { background-color: #d29922; }
+.dot-impossible { background-color: #f85149; }
+
+.todo-hackathon-name {
+    color: #8b949e;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.hidden { display: none !important; }
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+    pointer-events: none;
+}
+@keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+/* Confetti container sits above everything */
+#confettiContainer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+    overflow: hidden;
+}
+
+/* Smooth color changes when status changes */
+.card, .progress-fill, .badge {
+    transition: border-color 0.4s ease, background-color 0.4s ease, color 0.4s ease, width 0.3s ease;
+}
+
+/* Locked checklist on expired cards */
+.card.status-expired .task-item { cursor: not-allowed; }
+.card.status-expired .task-item input { cursor: not-allowed; }
+
+/* Locked submit task */
+.task-item.locked {
+    color: #6e7681;
+    cursor: not-allowed;
+}
+.task-item.locked input {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.lock-hint {
+    font-size: 11px;
+    color: #8b949e;
+    margin-left: 8px;
+    font-style: italic;
+}
+
+/* Phone layout */
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    header { padding: 16px; }
+    header h1 { font-size: 22px; }
+    .actions { flex-wrap: wrap; }
+    .actions button { flex: 1 1 100%; }
+    .card-header { flex-direction: column; gap: 8px; }
+    .countdown { font-size: 18px; }
+    .status-row { flex-wrap: wrap; }
+    .todo-task { flex-wrap: wrap; }
+    .todo-hackathon-name { flex-basis: 100%; margin-left: 26px; }
+}

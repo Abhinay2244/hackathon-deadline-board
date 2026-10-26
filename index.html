@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Deadline Board</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Hackathon Deadline Board</h1>
+            <p>Know what to work on today, and whether you can still finish.</p>
+            <p>1) Add your hackathons with deadlines, 2) tick off tasks as you work, 3) the board tells you if each one is Safe, Tight or Impossible.</p>
+            <div class="actions">
+                <button id="addHackathonBtn">Add hackathon</button>
+                <button id="loadSamplesBtn">Load sample hackathons</button>
+            </div>
+        </header>
+
+        <div id="todoPanel" class="panel hidden"></div>
+        <div id="cardsBoard" class="board"></div>
+    </div>
+
+    <!-- Modal Form -->
+    <div id="hackathonModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="margin-bottom: 12px; color: #f0f6fc;">Add Hackathon</h3>
+            <form id="hackathonForm">
+                <input type="hidden" id="editId" value="">
+                <div style="margin-bottom: 8px;">
+                    <label style="font-size: 12px; color: #8b949e;">Name</label>
+                    <input type="text" id="name" placeholder="Hackathon Name" required style="width: 100%; margin-top: 4px;">
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <label style="font-size: 12px; color: #8b949e;">Deadline (Local Time)</label>
+                    <input type="datetime-local" id="deadline" required style="width: 100%; margin-top: 4px;">
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; color: #8b949e;">Link</label>
+                    <input type="text" id="link" placeholder="https://..." style="width: 100%; margin-top: 4px;">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" id="saveBtn">Save</button>
+                    <button type="button" id="cancelBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confettiContainer"></div>
+
+    <script src="samples.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
